@@ -117,7 +117,7 @@ class Mocap3DKeys:
                 kpts_dict = {}
                 for key, k_index in keypoints_to_index.items():
                     try:
-                        kpts_dict[key] = kpts['keypoints_3d'][k_index]['position']
+                        kpts_dict[key] = kpts['keypoints_3d'][k_index]
                     except:
                         kpts_dict[key] = kpts.keypoints_3d[k_index]
                     # kpts_dict[key] = kpts['keypoints_3d'][:,k_index]
