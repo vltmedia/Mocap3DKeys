@@ -43,6 +43,10 @@ class Mocap3DKey:
         self.keypoints_3d = []
         self.Add3DKeys(data)
         
+    def Set3DPositionKeys(self, data = []):
+        self.keypoints_3d = []
+        self.Add3DPositionKeys(data)
+        
             
     def Add2DKeys(self, data = []):
         self.keypoints = []
@@ -117,9 +121,9 @@ class Mocap3DKeys:
                 kpts_dict = {}
                 for key, k_index in keypoints_to_index.items():
                     try:
-                        kpts_dict[key] = kpts['keypoints_3d'][k_index]
+                        kpts_dict[key] = kpts['keypoints_3d'][k_index]['position']
                     except:
-                        kpts_dict[key] = kpts.keypoints_3d[k_index]
+                        kpts_dict[key] = kpts.keypoints_3d[k_index].position
                     # kpts_dict[key] = kpts['keypoints_3d'][:,k_index]
                 kpts_dict['joints'] = list(keypoints_to_index.keys())
                 try:
