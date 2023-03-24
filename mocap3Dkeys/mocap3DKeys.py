@@ -8,24 +8,36 @@ def ConvertToFloats(data):
     return floatItems
         
 class Mocap3DKey:
-    def __init__(self, keypoints_3d = [], keypoints = [], joints = [],jointIndex = [], bbox = [], track_id = 999):
+    def __init__(self, keypoints_3d = [], keypoints = [], joints = [], bbox = [], track_id = 999):
         self.keypoints_3d = keypoints_3d
         self.keypoints = keypoints
-        self.jointsIndex = jointIndex
+        # self.jointsIndex = jointIndex
         self.joints = joints
         self.bbox = bbox
         self.track_id = track_id
         
-    
-        
+
     def Add3DKeys(self, data = []):
         for i in range(len(data)):
             item = data[i]
             # convert all the data in items to float
             floatItems = item
             # floatItems = ConvertToFloats(item)
-            self.keypoints_3d.append(KeyTransform(position = [item[0], item[1], item[2]]))
-            
+            self.keypoints_3d.append(item)
+
+    def Add3DPositionKeys(self, data = []):
+        for i in range(len(data)):
+            item = data[i]
+            # convert all the data in items to float
+            floatItems = item
+            # floatItems = ConvertToFloats(item)
+            self.Add3DTransformKey(position = [item[0], item[1], item[2]])
+
+    def Add3DTransformKey(self, position = [0,0,0], rotation = [0,0,0,0], scale = [1,1,1]):
+        self.keypoints_3d.append(KeyTransform(position = position, rotation = rotation, scale = scale))
+
+    def Add3DPositionKey(self, position = [0,0,0]):
+        self.Add3DTransformKey(position = position)
         
     def Set3DKeys(self, data = []):
         self.keypoints_3d = []
@@ -104,13 +116,18 @@ class Mocap3DKeys:
                 kpts = keymaps
                 kpts_dict = {}
                 for key, k_index in keypoints_to_index.items():
-                    pos = kpts['keypoints_3d']
-                    
-                    kpts_dict[key] = kpts['keypoints_3d'][k_index]['position']
+                    try:
+                        kpts_dict[key] = kpts['keypoints_3d'][k_index]['position']
+                    except:
+                        kpts_dict[key] = kpts.keypoints_3d[k_index]
                     # kpts_dict[key] = kpts['keypoints_3d'][:,k_index]
                 kpts_dict['joints'] = list(keypoints_to_index.keys())
-                kpts['joints']  =kpts_dict
-                kpts['jointsIndex']  = kpts_dict['joints']
+                try:
+                    kpts['joints']  =kpts_dict
+                    # kpts['jointsIndex']  = kpts_dict['joints']
+                except:
+                    kpts.joints  =kpts_dict
+                    kpts.jointsIndex  = kpts_dict['joints']
                 # item.joints = kpts_dict['joints']
             v = 0
             
