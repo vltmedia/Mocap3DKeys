@@ -5,5 +5,5 @@ file = "mock\outMocapData.json"
 
 # read json file
 mocap3dKeys = Mocap3DKeys.LoadJSONAsMocap3DKeysObject(file)
-mocap3dKeys.convertToBodyJointsDictionary()
+mocap3dKeys.generateJointRotations()
 v = 0
