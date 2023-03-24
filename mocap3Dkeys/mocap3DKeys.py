@@ -1,6 +1,11 @@
 from mocap3Dkeys.mocap3Dconstants import *
 from mocap3Dkeys.common.transform import *
 
+def ConvertToFloats(data):
+    floatItems = []
+    for j in range(len(data)):
+        floatItems.append(float(data[j]))
+    return floatItems
         
 class Mocap3DKey:
     def __init__(self, keypoints_3d = [], keypoints = [], joints = [],jointIndex = [], bbox = [], track_id = 999):
@@ -11,15 +16,34 @@ class Mocap3DKey:
         self.bbox = bbox
         self.track_id = track_id
         
+    
+        
     def Add3DKeys(self, data = []):
         for i in range(len(data)):
             item = data[i]
+            # convert all the data in items to float
+            floatItems = item
+            # floatItems = ConvertToFloats(item)
             self.keypoints_3d.append(KeyTransform(position = [item[0], item[1], item[2]]))
+            
+        
+    def Set3DKeys(self, data = []):
+        self.keypoints_3d = []
+        self.Add3DKeys(data)
+        
+            
     def Add2DKeys(self, data = []):
+        self.keypoints = []
         for i in range(len(data)):
             item = data[i]
-            self.keypoints.append(KeyTransform(position = [item[0], item[1], item[2]]))
-        
+            floatItems = item
+            # floatItems = ConvertToFloats(item)
+            self.keypoints.append(KeyTransform(position = [floatItems[0],floatItems[1], floatItems[2]]))
+    
+    def Set2DKeys(self, data = []):
+        self.keypoints = []
+        self.Add2DKeys(data)
+                
     def Add3DKey(self, data):
         self.keypoints_3d.append(data)
     def Add2DKey(self, data):
@@ -31,7 +55,8 @@ class Mocap3DKey:
         
 class Mocap3DKeys:
     # make points based on template
-    def __init__(self, keys = [], mocapTypes = ["BODY"], engine = "COCO", version = 1.0, data = []):
+    def __init__(self, keys = [], mocapTypes = ["BODY"], engine = "COCO", version = 1.0, data = [], frames = 0):
+        self.frames = frames
         self.keys = keys
         self.engine = engine
         self.version = version
